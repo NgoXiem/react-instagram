@@ -17,7 +17,7 @@ export default function Signup() {
   const isInvalid = email === "" || password === "" || username === "";
 
   const handleFB = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     const provider = new FacebookAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -44,6 +44,7 @@ export default function Signup() {
           await setDoc(doc(db, "users", user.uid), {
             userId: user.uid,
             username: username.toLowerCase(),
+            fullName: username.fullname,
             email: email.toLowerCase(),
             following: ["2"],
             followers: [],
@@ -123,7 +124,7 @@ export default function Signup() {
                 </button>
               </form>
             </div>
-            <div className="border py-3 px-2 text-center">
+            <div className="border py-3 px-2 text-center mt-2">
               Have an account?
               <Link to="/login" className=" text-blue-400 font-medium ml-1">
                 Log in

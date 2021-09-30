@@ -52,8 +52,8 @@ export default function Header() {
       });
   };
   return user ? (
-    <header>
-      <div className="flex justify-between mx-auto items-center border-b-1 mt-5 max-w-screen-lg container">
+    <header className="border-b pb-2">
+      <div className="flex justify-between mx-auto items-center mt-5 max-w-screen-lg container">
         <div>
           <Link to="/">
             <img
@@ -101,7 +101,7 @@ export default function Header() {
               <img
                 src={`/images/avatars/${username}.jpg`}
                 alt="profile-photo"
-                className="rounded-full h-10 w-10 object-cover "
+                className="rounded-full h-8 w-8 object-cover "
               />
             </Link>
           </div>
