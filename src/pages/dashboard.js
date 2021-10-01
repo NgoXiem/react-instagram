@@ -31,10 +31,10 @@ export default function Dashboard() {
   }, [user]);
   return (
     <LoggedInUserContext.Provider value={data}>
-      <div>
+      <div className="bg-gray-background w-full h-full">
         <Header></Header>
-        <div className="max-w-screen-lg grid grid-cols-3 items-center justify-between mx-auto mt-10 gap-10">
-          <div className="col-span-2 border">
+        <div className="max-w-screen-lg grid grid-cols-3 mx-auto mt-10 gap-10">
+          <div className="col-span-2">
             <Timeline></Timeline>
           </div>
           <div className="col-span-1">

@@ -52,7 +52,7 @@ export default function Header() {
       });
   };
   return user ? (
-    <header className="border-b pb-2">
+    <header className="border-b pb-2 bg-white">
       <div className="flex justify-between mx-auto items-center mt-5 max-w-screen-lg container">
         <div>
           <Link to="/">
