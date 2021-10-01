@@ -28,7 +28,6 @@ export default function Dashboard() {
           console.log("No such document!");
         }
       });
-    getUser(db);
   }, [user]);
   return (
     <LoggedInUserContext.Provider value={data}>

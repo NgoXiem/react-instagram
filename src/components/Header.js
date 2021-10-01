@@ -100,7 +100,7 @@ export default function Header() {
             <Link to={`/profile:${userId}`}>
               <img
                 src={`/images/avatars/${username}.jpg`}
-                alt="profile-photo"
+                alt="profile"
                 className="rounded-full h-8 w-8 object-cover "
               />
             </Link>

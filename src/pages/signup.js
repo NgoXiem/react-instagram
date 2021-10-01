@@ -37,16 +37,15 @@ export default function Signup() {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         // Add a new document in collection "users"
         const user = userCredential.user;
         const addUser = async () => {
           await setDoc(doc(db, "users", user.uid), {
             userId: user.uid,
             username: username.toLowerCase(),
-            fullName: username.fullname,
+            fullName: fullname,
             email: email.toLowerCase(),
-            following: ["2", "3", "4"],
+            following: ["2"],
             followers: [],
             dateCreated: Date.now(),
           });

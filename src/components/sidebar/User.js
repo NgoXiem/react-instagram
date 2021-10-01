@@ -20,7 +20,7 @@ export default function User() {
       </Link>
       <div className="col-span-2">
         <p className="font-semibold">{loggedinUser.username}</p>
-        <p>{loggedinUser.fullName}</p>
+        <p className="text-gray-base">{loggedinUser.fullName}</p>
       </div>
     </div>
   ) : (

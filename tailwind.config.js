@@ -5,13 +5,14 @@ module.exports = {
     extend: {
       colors: {
         gray: {
-          background: "#fafafa"
-        }
-      }
+          background: "#fafafa",
+          base: "#616161",
+        },
+      },
     },
   },
   variants: {
     extend: {},
   },
   plugins: [],
-}
+};
