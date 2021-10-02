@@ -1,50 +1,54 @@
-import React, { useState, useRef } from "react";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 import db from "../../lib/firebase";
+import { LoggedInUserContext } from "../../pages/dashboard";
 
-export default function Buttons({ username, photoId, userId, likes }) {
+export default function Buttons({ photoId, likes, handleClickMesssge }) {
   const [liked, setLiked] = useState(false);
-  const [countLike, setCountLike] = useState(likes);
-  const [comment, setComment] = useState("");
-  const inputRef = useRef(null);
+  const [countLike, setCountLike] = useState(likes.length);
+  // const [status, setStatus] = useState(false);
+  const loggedinUser = useContext(LoggedInUserContext);
+
+  useEffect(() => {
+    const isLiked = async () => {
+      const docRef = doc(db, "photos", photoId);
+      const docSnap = await getDoc(docRef);
+      return docSnap.data().likes;
+    };
+    isLiked().then((data) => setLiked(data.includes(loggedinUser.userId)));
+  }, []);
 
   const handleClickHeart = () => {
-    setLiked((liked) => !liked);
     // update and remove liked status
-    const likePost = async (db) => {
+    const likePost = async () => {
       const followingRef = doc(db, "photos", photoId);
       await updateDoc(followingRef, {
-        likes: arrayUnion(userId),
+        likes: arrayUnion(loggedinUser.userId),
       });
-      setCountLike(countLike + 1);
+      setLiked(true);
     };
-    const unlikePost = async (db) => {
+    const unlikePost = async () => {
       const followingRef = doc(db, "photos", photoId);
       await updateDoc(followingRef, {
-        likes: arrayRemove(userId),
+        likes: arrayRemove(loggedinUser.userId),
       });
+      setLiked(false);
+    };
+    if (liked) {
       setCountLike(countLike - 1);
-    };
+      unlikePost();
+    } else {
+      likePost();
+      setCountLike(countLike + 1);
+    }
+  };
 
-    !liked ? likePost(db) : unlikePost(db);
-  };
-  const handleClickMesssge = () => {
-    inputRef.current.focus();
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("commented");
-    const commentPost = async (db) => {
-      const followingRef = doc(db, "photos", photoId);
-      await updateDoc(followingRef, {
-        comments: arrayUnion({
-          comment: comment,
-          displayName: username,
-        }),
-      });
-      commentPost(db);
-    };
-  };
   return (
     <>
       <div className="flex gap-3 pl-5">
@@ -82,28 +86,6 @@ export default function Buttons({ username, photoId, userId, likes }) {
         </button>
       </div>
       <div className="font-bold pl-5">{countLike} likes</div>
-      <div className="border-t py-4 px-4">
-        <form
-          className="flex justify-between"
-          onSubmit={(e) => handleSubmit(e)}
-        >
-          <input
-            className="w-full h-full outline-none opacity-40 focus:opacity-100"
-            type="text"
-            placeholder="Add a comment..."
-            ref={inputRef}
-            onChange={(e) => setComment(e.target.value)}
-          />
-          <button
-            type="submit"
-            className={`font-semibold text-blue-500 ${
-              comment.length > 0 ? "opacity-100" : "opacity-40"
-            }`}
-          >
-            Post
-          </button>
-        </form>
-      </div>
     </>
   );
 }

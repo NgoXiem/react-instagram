@@ -3,7 +3,7 @@ import { LoggedInUserContext } from "../pages/dashboard";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import db from "../lib/firebase";
 import Skeleton from "react-loading-skeleton";
-import Post from "./post/Post";
+import SinglePost from "./post/SinglePost";
 
 export default function Timeline() {
   const { following } = useContext(LoggedInUserContext);
@@ -63,7 +63,16 @@ export default function Timeline() {
       {!postInfo ? (
         <Skeleton count={1} height={100}></Skeleton>
       ) : postInfo.length > 0 ? (
-        <Post posts={postInfo} followed={followed}></Post>
+        <div className="flex flex-col gap-8 ">
+          {postInfo.map((post) => (
+            <div
+              key={post.id}
+              className="border flex flex-col gap-3 bg-white pt-5 rounded "
+            >
+              <SinglePost post={post} followed={followed}></SinglePost>
+            </div>
+          ))}
+        </div>
       ) : null}
     </div>
   );
