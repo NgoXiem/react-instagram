@@ -30,7 +30,7 @@ export default function App() {
         localStorage.removeItem("user");
       }
     });
-  }, []);
+  }, [auth]);
 
   useEffect(() => {
     const getUser = async (db) => {

@@ -21,7 +21,7 @@ export default function Buttons({ photoId, likes, handleClickMesssge }) {
       return docSnap.data().likes;
     };
     isLiked().then((data) => setLiked(data.includes(loggedinUser.userId)));
-  }, []);
+  }, [photoId, loggedinUser.userId]);
 
   const handleClickHeart = () => {
     // update and remove liked status

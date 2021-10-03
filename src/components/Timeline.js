@@ -9,12 +9,34 @@ export default function Timeline() {
   const { following } = useContext(LoggedInUserContext);
   const [followed, setFollowed] = useState(null);
   const [postInfo, setPostInfo] = useState(null);
-  // query the followed user by id
   let data = [];
   let posts = [];
+  // useEffect(() => {
+  //   following &&
+  //     following.map((id) => {
+  //       const getPhotosbyUserId = async () => {
+  //         const q = query(collection(db, "photos"), where("userId", "==", id));
+  //         const querySnapshot = await getDocs(q);
+  //         querySnapshot.forEach((doc) => {
+  //           posts = [
+  //             ...posts,
+  //             {
+  //               id: doc.id,
+  //               data: doc.data(),
+  //             },
+  //           ];
+  //         });
+  //         setPostInfo(posts);
+  //       };
+  //       following && getPhotosbyUserId();
+  //     });
+  // }, [following]);
+  // console.log(posts);
+
+  // query the followed user by id
   useEffect(() => {
     following &&
-      following.map((id) => {
+      following.forEach((id) => {
         const getUserbyUserId = async (db) => {
           const q = query(collection(db, "users"), where("userId", "==", id));
           const querySnapshot = await getDocs(q);
@@ -33,10 +55,10 @@ export default function Timeline() {
       });
   }, [following]);
 
-  // query the photos of the followed users
+  // query the posts of the followed users
   useEffect(() => {
     followed &&
-      followed.map((item) => {
+      followed.forEach((item) => {
         const getPhotosbyUserId = async (db) => {
           const q = query(
             collection(db, "photos"),
@@ -73,7 +95,9 @@ export default function Timeline() {
             </div>
           ))}
         </div>
-      ) : null}
+      ) : (
+        <div>You haven't followed anyone yet!</div>
+      )}
     </div>
   );
 }

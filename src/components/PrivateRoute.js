@@ -18,6 +18,6 @@ export default function PrivateRoute({ children }) {
         isMounted && setUser(null);
       }
     });
-  }, []);
+  }, [auth]);
   return user ? <>{children}</> : <Redirect to="/login"></Redirect>;
 }

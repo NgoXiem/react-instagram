@@ -12,7 +12,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
   useEffect(() => {
     clickedUser && setFollow(clickedUser.data.followers.includes(userId));
     clickedUser && setCountFollow(clickedUser.data.followers.length);
-  }, [clickedUser]);
+  }, [clickedUser, userId]);
 
   const handleClick = () => {
     const followUser = async () => {
@@ -29,12 +29,26 @@ export default function ProfileInfo({ clickedUser, photos }) {
       });
       setFollow(false);
     };
+    const addFollowing = async () => {
+      const update = doc(db, "users", userId);
+      await updateDoc(update, {
+        following: arrayUnion(clickedUser.data.userId),
+      });
+    };
+    const removeFollowing = async () => {
+      const update = doc(db, "users", userId);
+      await updateDoc(update, {
+        following: arrayRemove(clickedUser.data.userId),
+      });
+    };
     if (follow) {
       unfollowUser();
       setCountFollow(countFollow - 1);
+      removeFollowing();
     } else {
       followUser();
       setCountFollow(countFollow + 1);
+      addFollowing();
     }
   };
   return !photos ? (

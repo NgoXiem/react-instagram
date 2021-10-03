@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import db from "../../lib/firebase";
 export default function SuggestedProfile({ userId, profile }) {
   const [followed, setFollowed] = useState(false);
@@ -17,7 +17,7 @@ export default function SuggestedProfile({ userId, profile }) {
     const updateFollowed = async (db) => {
       const followedRef = doc(db, "users", docId);
       await updateDoc(followedRef, {
-        following: arrayUnion(userId),
+        followers: arrayUnion(userId),
       });
     };
     updateFollowing(db);
