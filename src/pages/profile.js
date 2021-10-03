@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import ProfilePhoto from "../components/profile/ProfilePhoto";
 import ProfileInfo from "../components/profile/ProfileInfo";
 import { useParams } from "react-router";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import db from "../lib/firebase";
+import { LoggedInUserContext, UserContext } from "../App";
 export default function Profile() {
+  const loggedinUserId = useContext(UserContext);
   const { id } = useParams();
   const [clickedUser, setClickedUser] = useState(null);
   const [photos, setPhotos] = useState(null);
   let data = [];
+
   useEffect(() => {
     const getUserbyId = async () => {
       const q = query(collection(db, "users"), where("userId", "==", id));
@@ -43,7 +46,11 @@ export default function Profile() {
     <div>
       <Header></Header>
       <div className="grid grid-cols-1 justify-between items-center max-w-screen-lg mx-auto">
-        <ProfileInfo clickedUser={clickedUser} photos={photos}></ProfileInfo>
+        <ProfileInfo
+          clickedUser={clickedUser}
+          photos={photos}
+          loggedinUserId={loggedinUserId.uid}
+        ></ProfileInfo>
         <ProfilePhoto photos={photos}></ProfilePhoto>
       </div>
     </div>

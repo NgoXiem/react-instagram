@@ -4,14 +4,16 @@ import { LoggedInUserContext } from "../../App";
 import db from "../../lib/firebase";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
-export default function ProfileInfo({ clickedUser, photos }) {
+export default function ProfileInfo({ clickedUser, photos, loggedinUserId }) {
   const [follow, setFollow] = useState(null);
   const [countFollow, setCountFollow] = useState(null);
   const { userId } = useContext(LoggedInUserContext);
 
   useEffect(() => {
-    clickedUser && setFollow(clickedUser.data.followers.includes(userId));
-    clickedUser && setCountFollow(clickedUser.data.followers.length);
+    if (clickedUser) {
+      setFollow(clickedUser.data.followers.includes(userId));
+      setCountFollow(clickedUser.data.followers.length);
+    }
   }, [clickedUser, userId]);
 
   const handleClick = () => {
@@ -68,7 +70,9 @@ export default function ProfileInfo({ clickedUser, photos }) {
             {clickedUser.data.username}
           </h1>
           <button
-            className="bg-blue-500 text-white font-semibold px-6 py-1 rounded text-sm"
+            className={`bg-blue-500 text-white font-semibold px-6 py-1 rounded text-sm ${
+              loggedinUserId === clickedUser.id ? "hidden" : ""
+            }`}
             onClick={() => handleClick()}
           >
             {follow ? "Unfollow" : "Follow"}
