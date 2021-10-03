@@ -7,12 +7,11 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import db from "../../lib/firebase";
-import { LoggedInUserContext } from "../../pages/dashboard";
+import { LoggedInUserContext } from "../../App";
 
 export default function Buttons({ photoId, likes, handleClickMesssge }) {
   const [liked, setLiked] = useState(false);
   const [countLike, setCountLike] = useState(likes.length);
-  // const [status, setStatus] = useState(false);
   const loggedinUser = useContext(LoggedInUserContext);
 
   useEffect(() => {

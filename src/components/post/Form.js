@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import db from "../../lib/firebase";
-import { LoggedInUserContext } from "../../pages/dashboard";
+import { LoggedInUserContext } from "../../App";
 
 export default function Form({
   inputRef,

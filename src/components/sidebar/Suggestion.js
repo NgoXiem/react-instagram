@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Skeleton from "react-loading-skeleton";
 import db from "../../lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { LoggedInUserContext } from "../../pages/dashboard";
+import { LoggedInUserContext } from "../../App";
 import SuggestedProfile from "./SuggestedProfile";
 
 export default function Suggestion() {

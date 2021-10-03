@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { LoggedInUserContext } from "../../pages/dashboard";
+import { LoggedInUserContext } from "../../App";
 
 export default function User() {
   const loggedinUser = useContext(LoggedInUserContext);
   return loggedinUser.userId ? (
     <div className="grid grid-cols-3 items-center">
-      <Link to={`/profile:${loggedinUser.userId}`}>
+      <Link to={`/profile/${loggedinUser.userId}`}>
         <img
           className="rounded-full w-16 h-16 object-cover col-span-1"
           src={

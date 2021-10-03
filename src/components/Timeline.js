@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { LoggedInUserContext } from "../pages/dashboard";
+import { LoggedInUserContext } from "../App";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import db from "../lib/firebase";
 import Skeleton from "react-loading-skeleton";

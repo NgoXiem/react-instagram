@@ -19,7 +19,7 @@ export default function SinglePost({ post, followed }) {
   return (
     <>
       <div className="flex gap-3 items-center pl-5 pb-1">
-        <Link to={`/profile:${post.data.userId}`}>
+        <Link to={`/profile/${post.data.userId}`}>
           <img
             className="w-8 h-8 rounded-full object-cover"
             alt="profile"

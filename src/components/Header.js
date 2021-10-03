@@ -97,7 +97,7 @@ export default function Header() {
                 />
               </svg>
             </button>
-            <Link to={`/profile:${userId}`}>
+            <Link to={`/profile/${userId}`}>
               <img
                 src={`/images/avatars/${username}.jpg`}
                 alt="profile"
