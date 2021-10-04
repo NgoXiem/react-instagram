@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { LoggedInUserContext } from "../App";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import db from "../lib/firebase";
 import Skeleton from "react-loading-skeleton";
 import SinglePost from "./post/SinglePost";
@@ -83,7 +83,7 @@ export default function Timeline() {
   return (
     <div>
       {!postInfo ? (
-        <Skeleton count={1} height={100}></Skeleton>
+        <Skeleton count={1} height={400}></Skeleton>
       ) : postInfo.length > 0 ? (
         <div className="flex flex-col gap-8 ">
           {postInfo.map((post) => (

@@ -52,8 +52,8 @@ export default function Header() {
       });
   };
   return user ? (
-    <header className="border-b pb-2 bg-white">
-      <div className="flex justify-between mx-auto items-center mt-5 max-w-screen-lg container">
+    <header className="border-b pb-2 bg-white fixed top-0 w-full z-10">
+      <div className="flex justify-between mx-auto items-center pt-4 max-w-screen-lg container">
         <div>
           <Link to="/">
             <img
@@ -102,6 +102,7 @@ export default function Header() {
                 src={`/images/avatars/${username}.jpg`}
                 alt="profile"
                 className="rounded-full h-8 w-8 object-cover "
+                onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
               />
             </Link>
           </div>

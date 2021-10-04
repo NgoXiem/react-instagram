@@ -26,16 +26,17 @@ export default function SuggestedProfile({ userId, profile }) {
   return (
     <div className="grid grid-cols-3 gap-6 justify-between items-center">
       <div className="flex gap-2 col-span-1 items-center">
+        <img
+          src={`/images/avatars/${profile.data.username}.jpg`}
+          alt="profile"
+          className="rounded-full w-8 h-8 object-cover"
+          onError={(e) => e.target.src= "/images/avatars/default.jpg"}
+        />
         <Link to={`/profile/${profile.data.userId}`}>
-          <img
-            src={`/images/avatars/${profile.data.username}.jpg`}
-            alt="profile"
-            className="rounded-full w-8 h-8 object-cover"
-          />
+          <p className="font-semibold text-sm text-gray-base">
+            {profile.data.username}
+          </p>
         </Link>
-        <p className="font-semibold text-sm text-gray-base">
-          {profile.data.username}
-        </p>
       </div>
       <div className="col-span-2">
         <button

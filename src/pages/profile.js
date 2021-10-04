@@ -43,7 +43,7 @@ export default function Profile() {
   }, [clickedUser]);
 
   return (
-    <div>
+    <div className="mt-24">
       <Header></Header>
       <div className="grid grid-cols-1 justify-between items-center max-w-screen-lg mx-auto">
         <ProfileInfo

@@ -62,6 +62,7 @@ export default function ProfileInfo({ clickedUser, photos, loggedinUserId }) {
           className="rounded-full w-36 h-36 object-cover"
           src={`/images/avatars/${clickedUser.data.username}.jpg`}
           alt="profile"
+          onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
         />
       </div>
       <div className="col-span-2 grid grid-rows-3 gap-3">
