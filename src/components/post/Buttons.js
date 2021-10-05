@@ -27,17 +27,21 @@ export default function Buttons({ photoId, likes, handleClickMesssge }) {
     // update and remove liked status
     const likePost = async () => {
       const followingRef = doc(db, "photos", photoId);
-      await updateDoc(followingRef, {
+      const updateDoc = await updateDoc(followingRef, {
         likes: arrayUnion(loggedinUser.userId),
       });
-      setLiked(true);
+      updateDoc()
+        .then(() => setLiked(true))
+        .catch((error) => console.log(error));
     };
     const unlikePost = async () => {
       const followingRef = doc(db, "photos", photoId);
       await updateDoc(followingRef, {
         likes: arrayRemove(loggedinUser.userId),
       });
-      setLiked(false);
+      updateDoc()
+        .then(() => setLiked(false))
+        .catch((error) => console.log(error));
     };
     if (liked) {
       setCountLike(countLike - 1);
@@ -47,7 +51,6 @@ export default function Buttons({ photoId, likes, handleClickMesssge }) {
       setCountLike(countLike + 1);
     }
   };
-
   return (
     <>
       <div className="flex gap-3 pl-5">

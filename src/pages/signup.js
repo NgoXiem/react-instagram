@@ -93,24 +93,28 @@ export default function Signup() {
                   placeholder="Username"
                   className="border p-1 focus:outline-none focus:border-gray-500 rounded"
                   onChange={(e) => setUsername(e.target.value)}
+                  value={username}
                 />
                 <input
                   type="text"
                   placeholder="Full name"
                   className="border p-1 focus:outline-none focus:border-gray-500 rounded"
                   onChange={(e) => setFullname(e.target.value)}
+                  value={fullname}
                 />
                 <input
                   type="text"
                   placeholder="Email address"
                   className="border p-1 focus:outline-none focus:border-gray-500 rounded"
                   onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                 />
                 <input
                   type="password"
                   placeholder="Password"
                   className="border p-1 focus:outline-none focus:border-gray-500 rounded"
                   onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
                 <button
                   type="submit"

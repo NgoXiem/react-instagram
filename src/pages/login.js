@@ -6,7 +6,7 @@ import { signInWithPopup, FacebookAuthProvider } from "firebase/auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState();
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const history = useHistory();
   const auth = getAuth();
@@ -35,9 +35,7 @@ export default function Login() {
     e.preventDefault();
 
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        // const user = userCredential.user;
+      .then(() => {
         history.push("/");
       })
       .catch((error) => {
@@ -72,12 +70,14 @@ export default function Login() {
                   placeholder="Email address"
                   className="border p-1 focus:outline-none focus:border-gray-500 rounded"
                   onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                 />
                 <input
                   type="password"
                   placeholder="Password"
                   className="border p-1 focus:outline-none focus:border-gray-500 rounded"
                   onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
                 <div className="text-center font-semibold text-sm text-gray-500">
                   OR

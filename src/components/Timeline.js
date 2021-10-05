@@ -4,82 +4,75 @@ import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import db from "../lib/firebase";
 import Skeleton from "react-loading-skeleton";
 import SinglePost from "./post/SinglePost";
+import { set } from "date-fns/esm";
 
 export default function Timeline() {
   const { following } = useContext(LoggedInUserContext);
-  const [followed, setFollowed] = useState(null);
+  const [followedUsersDetails, setFollowedUsersDetails] = useState([]);
   const [postInfo, setPostInfo] = useState(null);
   let data = [];
   let posts = [];
-  // useEffect(() => {
-  //   following &&
-  //     following.map((id) => {
-  //       const getPhotosbyUserId = async () => {
-  //         const q = query(collection(db, "photos"), where("userId", "==", id));
-  //         const querySnapshot = await getDocs(q);
-  //         querySnapshot.forEach((doc) => {
-  //           posts = [
-  //             ...posts,
-  //             {
-  //               id: doc.id,
-  //               data: doc.data(),
-  //             },
-  //           ];
-  //         });
-  //         setPostInfo(posts);
-  //       };
-  //       following && getPhotosbyUserId();
-  //     });
-  // }, [following]);
-  // console.log(posts);
 
-  // query the followed user by id
+  // query the posts based on the following list
+  useEffect(() => {
+    following && following.length > 0
+      ? following.forEach((id) => {
+          const getPhotosbyUserId = async (db) => {
+            const q = query(
+              collection(db, "photos"),
+              where("userId", "==", id)
+            );
+            const querySnapshot = await getDocs(q);
+            return querySnapshot;
+          };
+          getPhotosbyUserId(db)
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                posts = [
+                  ...posts,
+                  {
+                    id: doc.id,
+                    data: doc.data(),
+                  },
+                ];
+              });
+              setPostInfo(posts);
+            })
+            .catch((error) => console.log(error));
+        })
+      : setPostInfo([]);
+  }, [following]);
+
+  // query the followed user details by id
   useEffect(() => {
     following &&
       following.forEach((id) => {
         const getUserbyUserId = async (db) => {
           const q = query(collection(db, "users"), where("userId", "==", id));
           const querySnapshot = await getDocs(q);
-          querySnapshot.forEach((doc) => {
-            data = [
-              ...data,
-              {
-                id: doc.id,
-                data: doc.data(),
-              },
-            ];
-          });
-          setFollowed(data);
+          return querySnapshot;
         };
-        following && getUserbyUserId(db);
+        getUserbyUserId(db)
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              data = [
+                ...data,
+                {
+                  userId: doc.data().userId,
+                  username: doc.data().username,
+                },
+              ];
+            });
+            setFollowedUsersDetails(data);
+          })
+          .catch((error) => console.log(error));
       });
   }, [following]);
-
-  // query the posts of the followed users
-  useEffect(() => {
-    followed &&
-      followed.forEach((item) => {
-        const getPhotosbyUserId = async (db) => {
-          const q = query(
-            collection(db, "photos"),
-            where("userId", "==", item.data.userId)
-          );
-          const querySnapshot = await getDocs(q);
-          querySnapshot.forEach((doc) => {
-            posts = [
-              ...posts,
-              {
-                id: doc.id,
-                data: doc.data(),
-              },
-            ];
-          });
-          setPostInfo(posts);
-        };
-        followed && getPhotosbyUserId(db);
-      });
-  }, [followed]);
-
+  // filter username based on userId
+  const getUsername = (arr, id) => {
+    const filteredArr = arr.filter((item) => item.userId === id);
+    return filteredArr;
+  };
   return (
     <div>
       {!postInfo ? (
@@ -91,12 +84,19 @@ export default function Timeline() {
               key={post.id}
               className="border flex flex-col gap-3 bg-white pt-5 rounded "
             >
-              <SinglePost post={post} followed={followed}></SinglePost>
+              <SinglePost
+                post={post}
+                users={followedUsersDetails}
+                userId={post.data.userId}
+                getUsername={getUsername}
+              ></SinglePost>
             </div>
           ))}
         </div>
       ) : (
-        <div>You haven't followed anyone yet!</div>
+        <div className="font-semibold text-lg text-center h-screen">
+          You haven't followed anyone yet!
+        </div>
       )}
     </div>
   );
