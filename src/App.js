@@ -16,7 +16,7 @@ export const UserContext = React.createContext(null);
 export const LoggedInUserContext = React.createContext(null);
 export default function App() {
   // const {id} = useParams();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState();
   const [data, setData] = useState({});
   const auth = getAuth();
 

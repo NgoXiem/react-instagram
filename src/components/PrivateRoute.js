@@ -1,18 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Redirect } from "react-router";
 import { app } from "../lib/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function PrivateRoute({ children }) {
   const [user, setUser] = useState({});
+  const isMounted = useRef(true);
   const auth = getAuth();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        isMounted && setUser(user);
       } else {
-        setUser(null);
+        isMounted && setUser(null);
       }
     });
   }, [auth]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { app } from "../lib/firebase";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -7,19 +7,26 @@ import { doc, getDoc } from "firebase/firestore";
 import db from "../lib/firebase";
 
 export default function Header() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const isMounted = useRef(true);
+  const [user, setUser] = useState(null);
   const [username, setUsername] = useState("default");
   const [userId, setUserId] = useState("");
   const history = useHistory();
   const auth = getAuth();
 
   useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        isMounted && setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
       } else {
-        setUser(null);
+        isMounted && setUser(null);
         localStorage.removeItem("user");
       }
     });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import db from "../../lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -8,8 +8,14 @@ import SuggestedProfile from "./SuggestedProfile";
 export default function Suggestion() {
   const { following, userId } = useContext(LoggedInUserContext);
   const [profiles, setProfiles] = useState(null);
+  const isMounted = useRef(true);
   let data = [];
   // query data in firestore to get all the users I'm not following (using userId)
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
   useEffect(() => {
     const getSuggestedProfiles = async (db) => {
       const q = query(
@@ -17,18 +23,23 @@ export default function Suggestion() {
         where("userId", "not-in", [...following, userId])
       );
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        data = [
-          ...data,
-          {
-            id: doc.id,
-            data: doc.data(),
-          },
-        ];
-      });
-      setProfiles(data);
+      return querySnapshot;
     };
-    userId && getSuggestedProfiles(db);
+    userId &&
+      getSuggestedProfiles(db)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            data = [
+              ...data,
+              {
+                id: doc.id,
+                data: doc.data(),
+              },
+            ];
+          });
+          isMounted && setProfiles(data);
+        })
+        .catch((error) => console.log(error));
   }, [userId]);
 
   return (

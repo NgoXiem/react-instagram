@@ -4,7 +4,7 @@ import { LoggedInUserContext } from "../../App";
 import db from "../../lib/firebase";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
-export default function ProfileInfo({ clickedUser, photos, loggedinUserId }) {
+export default function ProfileInfo({ clickedUser, photos }) {
   const [follow, setFollow] = useState(null);
   const [countFollow, setCountFollow] = useState(null);
   const { userId } = useContext(LoggedInUserContext);
@@ -72,7 +72,7 @@ export default function ProfileInfo({ clickedUser, photos, loggedinUserId }) {
           </h1>
           <button
             className={`bg-blue-500 text-white font-semibold px-6 py-1 rounded text-sm ${
-              loggedinUserId === clickedUser.id ? "hidden" : ""
+              userId === clickedUser.id ? "hidden" : ""
             }`}
             onClick={() => handleClick()}
           >

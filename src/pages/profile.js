@@ -5,9 +5,7 @@ import ProfileInfo from "../components/profile/ProfileInfo";
 import { useParams } from "react-router";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import db from "../lib/firebase";
-import { LoggedInUserContext, UserContext } from "../App";
 export default function Profile() {
-  const loggedinUserId = useContext(UserContext);
   const { id } = useParams();
   const [clickedUser, setClickedUser] = useState(null);
   const [photos, setPhotos] = useState(null);
@@ -34,23 +32,26 @@ export default function Profile() {
         where("userId", "==", clickedUser.data.userId)
       );
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        posts = [...posts, { id: doc.id, data: doc.data() }];
-      });
-      setPhotos(posts);
+      return querySnapshot;
     };
-    clickedUser && getPhotosByUserId();
+    clickedUser &&
+      getPhotosByUserId()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            posts = [...posts, { id: doc.id, data: doc.data() }];
+          });
+          setPhotos(posts);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }, [clickedUser]);
 
   return (
     <div className="mt-24">
       <Header></Header>
       <div className="grid grid-cols-1 justify-between items-center max-w-screen-lg mx-auto">
-        <ProfileInfo
-          clickedUser={clickedUser}
-          photos={photos}
-          loggedinUserId={loggedinUserId.uid}
-        ></ProfileInfo>
+        <ProfileInfo clickedUser={clickedUser} photos={photos}></ProfileInfo>
         <ProfilePhoto photos={photos}></ProfilePhoto>
       </div>
     </div>
