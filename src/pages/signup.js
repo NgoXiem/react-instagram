@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import { app } from "../lib/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { signInWithPopup, FacebookAuthProvider } from "firebase/auth";
 import db from "../lib/firebase";
 
 export default function Signup() {
@@ -15,23 +14,6 @@ export default function Signup() {
   const history = useHistory();
   const auth = getAuth();
   const isInvalid = email === "" || password === "" || username === "";
-
-  const handleFB = (e) => {
-    e.preventDefault();
-    const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // The signed-in user info.
-        const user = result.user;
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
-        history.push("/dashboard");
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,7 +43,6 @@ export default function Signup() {
         setFullname("");
       });
   };
-
   return (
     <div className="bg-gray-background">
       <div className=" pt-10 container mx-auto">
@@ -73,15 +54,6 @@ export default function Signup() {
               </div>
               <div className="font-semibold text-gray-400 text-lg max-w-xs text-center">
                 Sign up to see photos and videos from your friends.
-              </div>
-              <div className="border p-1 text-center bg-blue-500 rounded my-5">
-                <a
-                  href="/login"
-                  className=" text-white font-medium ml-1 tracking-wide"
-                  onClick={(e) => handleFB(e)}
-                >
-                  Log in with Facebook
-                </a>
               </div>
               <form
                 className="flex flex-col gap-5"

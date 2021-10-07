@@ -27,21 +27,17 @@ export default function Buttons({ photoId, likes, handleClickMesssge }) {
     // update and remove liked status
     const likePost = async () => {
       const followingRef = doc(db, "photos", photoId);
-      const update = await updateDoc(followingRef, {
+      await updateDoc(followingRef, {
         likes: arrayUnion(loggedinUser.userId),
       });
-      update()
-        .then(() => setLiked(true))
-        .catch((error) => console.log(error));
+      setLiked(true);
     };
     const unlikePost = async () => {
       const followingRef = doc(db, "photos", photoId);
       await updateDoc(followingRef, {
         likes: arrayRemove(loggedinUser.userId),
       });
-      updateDoc()
-        .then(() => setLiked(false))
-        .catch((error) => console.log(error));
+      setLiked(false);
     };
     if (liked) {
       setCountLike(countLike - 1);

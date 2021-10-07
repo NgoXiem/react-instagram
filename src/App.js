@@ -2,6 +2,7 @@ import "./styles/app.css";
 import React, { Suspense, lazy, useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
+import Spinner from "./components/Spinner";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import db from "./lib/firebase";
@@ -15,7 +16,6 @@ const Profile = lazy(() => import("./pages/profile"));
 export const UserContext = React.createContext(null);
 export const LoggedInUserContext = React.createContext(null);
 export default function App() {
-  // const {id} = useParams();
   const [user, setUser] = useState();
   const [data, setData] = useState({});
   const auth = getAuth();
@@ -52,7 +52,7 @@ export default function App() {
     <UserContext.Provider value={user}>
       <LoggedInUserContext.Provider value={data}>
         <Router>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Spinner></Spinner>}>
             <Switch>
               <Route path="/login" component={Login}></Route>
               <Route path="/signup" component={Signup}></Route>

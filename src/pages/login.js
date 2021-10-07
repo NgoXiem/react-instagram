@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { app } from "../lib/firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { signInWithPopup, FacebookAuthProvider } from "firebase/auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,24 +11,6 @@ export default function Login() {
   const auth = getAuth();
 
   const isInvalid = email === "" || password === "";
-  const handleFB = (e) => {
-    // e.preventDefault();
-    const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // The signed-in user info.
-        console.log("signed in");
-
-        const user = result.user;
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
-        history.push("/");
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,18 +60,6 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                 />
-                <div className="text-center font-semibold text-sm text-gray-500">
-                  OR
-                </div>
-                <div className="text-blue-700 font-semibold text-center">
-                  <p
-                    href="#"
-                    onClick={(e) => handleFB(e)}
-                    className="cursor-pointer"
-                  >
-                    Log in with Facebook
-                  </p>
-                </div>
                 <button
                   type="submit"
                   className={`bg-blue-500 text-white rounded px-2 py-1 font-medium ${

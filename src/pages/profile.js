@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import ProfilePhoto from "../components/profile/ProfilePhoto";
 import ProfileInfo from "../components/profile/ProfileInfo";
