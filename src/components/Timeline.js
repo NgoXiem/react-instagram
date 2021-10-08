@@ -1,22 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import { LoggedInUserContext } from "../App";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import db from "../lib/firebase";
 import Skeleton from "react-loading-skeleton";
 import SinglePost from "./post/SinglePost";
-
+import NewPost from "./post/NewPost";
 export default function Timeline() {
-  const { following } = useContext(LoggedInUserContext);
+  const { following, userId } = useContext(LoggedInUserContext);
   const [followedUsersDetails, setFollowedUsersDetails] = useState([]);
   const [postInfo, setPostInfo] = useState(null);
+  const [list, setList] = useState(null);
   let data = [];
   let posts = [];
-
   // query the posts based on the following list
+  useEffect(() => {
+    following && setList([...following, userId]);
+  }, [following]);
 
   useEffect(() => {
-    following && following.length > 0
-      ? following.forEach((id) => {
+    list && list.length > 0
+      ? list.forEach((id) => {
           const getPhotosbyUserId = async (db) => {
             const q = query(
               collection(db, "photos"),
@@ -36,17 +39,18 @@ export default function Timeline() {
                   },
                 ];
               });
+              posts.sort((a, b) => b.data.dateCreated - a.data.dateCreated);
               setPostInfo(posts);
             })
             .catch((error) => console.log(error));
         })
       : setPostInfo([]);
-  }, [following]);
+  }, [list]);
 
   // query the followed user details by id
   useEffect(() => {
-    following &&
-      following.forEach((id) => {
+    list &&
+      list.forEach((id) => {
         const getUserbyUserId = async (db) => {
           const q = query(collection(db, "users"), where("userId", "==", id));
           const querySnapshot = await getDocs(q);
@@ -67,7 +71,7 @@ export default function Timeline() {
           })
           .catch((error) => console.log(error));
       });
-  }, [following]);
+  }, [list]);
 
   // filter username based on userId
   const getUsername = (arr, id) => {
@@ -75,7 +79,8 @@ export default function Timeline() {
     return filteredArr;
   };
   return (
-    <div className="h-full">
+    <div className="h-full flex flex-col gap-8">
+      <NewPost></NewPost>
       {following && following.length === 0 ? (
         <div className=" text-center font-semibold h-screen">
           Follow others to see photos!

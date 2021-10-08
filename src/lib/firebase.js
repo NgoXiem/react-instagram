@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 import { seedDatabase } from "../seed";
 
 // Your web app's Firebase configuration
@@ -20,8 +21,9 @@ const app = initializeApp(firebaseConfig);
 
 // reference to firestore
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // call the seedDatabase function ONCE!
 // seedDatabase(db);
-export { app };
+export { app, storage };
 export default db;
