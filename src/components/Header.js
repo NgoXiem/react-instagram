@@ -1,18 +1,37 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import { app } from "../lib/firebase";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useHistory } from "react-router";
 import { doc, getDoc } from "firebase/firestore";
 import db from "../lib/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { UserContext } from "../App";
 
-export default function Header() {
+export default function Header({}) {
   const isMounted = useRef(true);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("default");
   const [userId, setUserId] = useState("");
   const history = useHistory();
   const auth = getAuth();
+  const [imageUrl, setImageUrl] = useState(null);
+  const loggedinUser = useContext(UserContext);
+  // get avatar based on userId
+  useEffect(() => {
+    const getAvatar = async () => {
+      const q = query(
+        collection(db, "avatars"),
+        where("userId", "==", loggedinUser.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        // setImageUrl(doc.data().imageSrc);
+        setImageUrl(doc.data().imageSrc);
+      });
+    };
+    loggedinUser && getAvatar();
+  }, [loggedinUser]);
 
   useEffect(() => {
     return () => {
@@ -106,7 +125,7 @@ export default function Header() {
             </button>
             <Link to={`/profile/${userId}`}>
               <img
-                src={`/images/avatars/${username}.jpg`}
+                src={imageUrl ? imageUrl : `images/avatars/default.jpg`}
                 alt="profile"
                 className="rounded-full h-8 w-8 object-cover "
                 onError={(e) => (e.target.src = "/images/avatars/default.jpg")}

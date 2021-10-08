@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+
 export default function PostHeader({ user }) {
   return (
     <>
@@ -11,7 +12,7 @@ export default function PostHeader({ user }) {
           <img
             className="w-8 h-8 rounded-full object-cover"
             alt="profile"
-            src={`images/avatars/${user.username}.jpg`}
+            src={`/images/avatars/${user.username}.jpg`}
             onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
           />
           <Link to={`/profile/${user.userId}`}>

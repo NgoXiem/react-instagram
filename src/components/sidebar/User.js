@@ -1,15 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { LoggedInUserContext } from "../../App";
-
+import { collection, query, where, getDocs } from "firebase/firestore";
+import db from "../../lib/firebase";
 export default function User() {
   const loggedinUser = useContext(LoggedInUserContext);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    const getAvatar = async () => {
+      const q = query(
+        collection(db, "avatars"),
+        where("userId", "==", loggedinUser.userId)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setImageUrl(doc.data().imageSrc);
+      });
+    };
+    loggedinUser.userId && getAvatar();
+  }, [loggedinUser]);
+
   return loggedinUser.userId ? (
     <div className="grid grid-cols-3 items-center">
       <img
         className="rounded-full w-16 h-16 object-cover col-span-1"
-        src={`images/avatars/${loggedinUser.username}.jpg`}
+        src={imageUrl ? imageUrl : "/images/avatars/default.jpg"}
         alt="profile"
         onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
       />

@@ -3,6 +3,7 @@ import Buttons from "./Buttons";
 import Comments from "./Comments";
 import Skeleton from "react-loading-skeleton";
 import PostHeader from "./Header";
+
 export default function SinglePost({ post, users, userId, getUsername }) {
   const inputRef = useRef(null);
   const handleClickMesssge = () => {
