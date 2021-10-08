@@ -23,12 +23,11 @@ export default function ProfileInfo({ clickedUser, photos }) {
   const [follow, setFollow] = useState(null);
   const [countFollow, setCountFollow] = useState(null);
   const [avatar, setAvatar] = useState({});
-  const [imageUrl, setImageUrl] = useState(null);
   const [image, setImage] = useState({});
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(null);
   const { userId } = useContext(LoggedInUserContext);
-  console.log(avatar);
+
   // get initial number of following and followers
   useEffect(() => {
     if (clickedUser) {
@@ -135,7 +134,6 @@ export default function ProfileInfo({ clickedUser, photos }) {
         () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setImageUrl(downloadURL);
             // update avatar info to the "avatars" collection in firestore
             const addNewAvatar = async () => {
               await addDoc(collection(db, "avatars"), {
@@ -159,13 +157,12 @@ export default function ProfileInfo({ clickedUser, photos }) {
         setAvatar({
           id: doc.id,
           imageSrc: doc.data().imageSrc,
-          imagePatch: doc.data().imagePath,
+          imagePath: doc.data().imagePath,
         });
       });
     };
     userId && getAvatar();
   }, [userId]);
-
   return !photos ? (
     <Skeleton count={1} height={150}></Skeleton>
   ) : photos ? (

@@ -23,10 +23,10 @@ export default function User() {
   }, [loggedinUser]);
 
   return loggedinUser.userId ? (
-    <div className="grid grid-cols-3 items-center">
+    <div className="grid grid-cols-3 items-center gap-5">
       <img
         className="rounded-full w-16 h-16 object-cover col-span-1"
-        src={imageUrl ? imageUrl : "/images/avatars/default.jpg"}
+        src={imageUrl ? imageUrl : `/images/avatars/default.jpg`}
         alt="profile"
         onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
       />
