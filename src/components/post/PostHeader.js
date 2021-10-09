@@ -1,24 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { LoggedInUserContext } from "../../App";
-import db from "../../lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
-export default function PostHeader({ user }) {
-  const loggedinUser = useContext(LoggedInUserContext);
-  const [imageUrl, setImageUrl] = useState(null);
 
-  useEffect(() => {
-    async function getAvatarById(id) {
-      const q = query(collection(db, "avatars"), where("userId", "==", id));
-      const querySnapshot = await getDocs(q);
-      return querySnapshot;
-    }
-    getAvatarById(loggedinUser.userId).then((querySnapshot) =>
-      querySnapshot.forEach((doc) => setImageUrl(doc.data().imageSrc))
-    );
-  }, [loggedinUser.userId]);
-
+export default function PostHeader({ user, imageUrl }) {
   return (
     <>
       {!user ? (
@@ -28,11 +12,7 @@ export default function PostHeader({ user }) {
           <img
             className="w-8 h-8 rounded-full object-cover"
             alt="profile"
-            src={
-              loggedinUser.userId === user.userId
-                ? imageUrl
-                : `/images/avatars/${user.username}.jpg`
-            }
+            src={imageUrl ? imageUrl : `/images/avatars/${user.username}.jpg`}
             onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
           />
           <Link to={`/profile/${user.userId}`}>

@@ -5,10 +5,9 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useHistory } from "react-router";
 import { doc, getDoc } from "firebase/firestore";
 import db from "../lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import { UserContext } from "../App";
 
-export default function Header({}) {
+export default function Header() {
   const isMounted = useRef(true);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("default");
@@ -19,18 +18,16 @@ export default function Header({}) {
   const loggedinUser = useContext(UserContext);
   // get avatar based on userId
   useEffect(() => {
-    const getAvatar = async () => {
-      const q = query(
-        collection(db, "avatars"),
-        where("userId", "==", loggedinUser.uid)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        // setImageUrl(doc.data().imageSrc);
-        setImageUrl(doc.data().imageSrc);
-      });
+    const getAvatarbyId = async () => {
+      const docRef = doc(db, "avatars", loggedinUser.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setImageUrl(docSnap.data().imageSrc);
+      } else {
+        console.log("No such document");
+      }
     };
-    loggedinUser && getAvatar();
+    loggedinUser && getAvatarbyId();
   }, [loggedinUser]);
 
   useEffect(() => {

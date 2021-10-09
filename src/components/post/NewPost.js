@@ -14,7 +14,6 @@ export default function NewPost() {
   const [caption, setCaption] = useState("");
   const [image, setImage] = useState(null);
   const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(null);
   const isInvalid = caption === "" || image === null;
 
   const handleChange = (e) => {
@@ -34,10 +33,6 @@ export default function NewPost() {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const taskProgress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(taskProgress);
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -49,7 +44,6 @@ export default function NewPost() {
       },
       (error) => {
         setError(error.message);
-        setProgress(null);
         setImage(null);
         setCaption("");
       },
@@ -68,14 +62,13 @@ export default function NewPost() {
               likes: [],
             });
           };
-          addNewPhoto();
+          addNewPhoto().then(() => {
+            window.location.reload();
+          });
         });
       }
     );
   };
-  if (progress == 100) {
-    alert("Please refresh the page to see your post!");
-  }
   return (
     <div>
       <form

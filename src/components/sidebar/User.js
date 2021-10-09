@@ -2,24 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { LoggedInUserContext } from "../../App";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import db from "../../lib/firebase";
 export default function User() {
   const loggedinUser = useContext(LoggedInUserContext);
   const [imageUrl, setImageUrl] = useState(null);
-
   useEffect(() => {
-    const getAvatar = async () => {
-      const q = query(
-        collection(db, "avatars"),
-        where("userId", "==", loggedinUser.userId)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setImageUrl(doc.data().imageSrc);
-      });
+    const getAvatarbyId = async () => {
+      const docRef = doc(db, "avatars", loggedinUser.userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setImageUrl(docSnap.data().imageSrc);
+      } else {
+        console.log("No such document");
+      }
     };
-    loggedinUser.userId && getAvatar();
+    loggedinUser.userId && getAvatarbyId();
   }, [loggedinUser]);
 
   return loggedinUser.userId ? (

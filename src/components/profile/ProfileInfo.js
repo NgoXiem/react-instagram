@@ -1,15 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import { LoggedInUserContext } from "../../App";
 import db from "../../lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import {
   doc,
-  addDoc,
   updateDoc,
   arrayUnion,
   arrayRemove,
-  deleteDoc,
+  setDoc,
+  getDoc,
 } from "firebase/firestore";
 import {
   getStorage,
@@ -23,10 +22,15 @@ export default function ProfileInfo({ clickedUser, photos }) {
   const [follow, setFollow] = useState(null);
   const [countFollow, setCountFollow] = useState(null);
   const [avatar, setAvatar] = useState({});
-  const [image, setImage] = useState({});
+  const [image, setImage] = useState();
   const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(null);
   const { userId } = useContext(LoggedInUserContext);
+  const [downloadUrl, setDownloadUrl] = useState("");
+  const imageRef = useRef();
+
+  useEffect(() => {
+    imageRef.current = avatar.imagePath;
+  }, [avatar]);
 
   // get initial number of following and followers
   useEffect(() => {
@@ -85,24 +89,16 @@ export default function ProfileInfo({ clickedUser, photos }) {
       alert("Please choose file!");
     } else {
       const storage = getStorage();
-      //////// Delete the old avatar in cloud storage and update avatar info in firestore
-      //delete in storage
-      // if (avatar) {
-      //   const deleteRef = ref(storage, `avatars/${avatar.oldAvatar}`);
-      //   deleteObject(deleteRef)
-      //     .then(() => {
-      //       console.log("deleted avatar");
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //     });
-      //   // delete in firestore
-      //   const deleteAvatar = async () => {
-      //     await deleteDoc(doc(db, "avatars", avatar.id));
-      //   };
-      //   deleteAvatar();
-      // }
-
+      /////////// Delete old avatar in cloud storage
+      const oldAvatarRef = ref(storage, `avatars/${imageRef.current}`);
+      imageRef.current &&
+        deleteObject(oldAvatarRef)
+          .then(() => {
+            console.log("deleted successfully");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       ////////// Upload new avatar to cloud storage
       const postRef = ref(storage, `avatars/${image.name}`);
       const metadata = {
@@ -113,10 +109,6 @@ export default function ProfileInfo({ clickedUser, photos }) {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const taskProgress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(taskProgress);
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");
@@ -128,41 +120,47 @@ export default function ProfileInfo({ clickedUser, photos }) {
         },
         (error) => {
           setError(error.message);
-          setProgress(null);
           setImage(null);
         },
         () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setDownloadUrl(downloadURL);
             // update avatar info to the "avatars" collection in firestore
-            const addNewAvatar = async () => {
-              await addDoc(collection(db, "avatars"), {
+            const updateNewAvatar = async () => {
+              const docRef = doc(db, "avatars", userId);
+              await updateDoc(docRef, {
                 imageSrc: downloadURL,
                 userId: userId,
                 imagePath: image.name,
               });
             };
-            addNewAvatar();
+            updateNewAvatar();
           });
         }
       );
     }
   };
-  // get avatar based on userId
+  ///// get avatar based on avatar Id. If there is not avatars collection yet, create a new one(in order to update later)
   useEffect(() => {
-    const getAvatar = async () => {
-      const q = query(collection(db, "avatars"), where("userId", "==", userId));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setAvatar({
-          id: doc.id,
-          imageSrc: doc.data().imageSrc,
-          imagePath: doc.data().imagePath,
-        });
-      });
+    const getAvatarbyId = async () => {
+      const docRef = doc(db, "avatars", userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setAvatar(docSnap.data());
+      } else {
+        // if there is no data for avatar before, create an avatar document in firestore
+        const addNewDoc = async () => {
+          await setDoc(doc(db, "avatars", userId), {
+            id: userId,
+          });
+        };
+        userId && addNewDoc();
+      }
     };
-    userId && getAvatar();
-  }, [userId]);
+    userId && getAvatarbyId();
+  }, [userId, downloadUrl]);
+
   return !photos ? (
     <Skeleton count={1} height={150}></Skeleton>
   ) : photos ? (
@@ -171,7 +169,9 @@ export default function ProfileInfo({ clickedUser, photos }) {
         {userId === clickedUser.id ? (
           <img
             className="rounded-full w-36 h-36 object-cover"
-            src={avatar ? avatar.imageSrc : `/images/avatars/default.jpg`}
+            src={
+              avatar.imageSrc ? avatar.imageSrc : "/images/avatars/default.jpg"
+            }
             alt="profile"
             onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
           ></img>

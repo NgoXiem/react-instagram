@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { LoggedInUserContext } from "../App";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import db from "../lib/firebase";
 import Skeleton from "react-loading-skeleton";
 import SinglePost from "./post/SinglePost";
@@ -15,7 +15,7 @@ export default function Timeline() {
   // query the posts based on the following list
   useEffect(() => {
     following && setList([...following, userId]);
-  }, [following]);
+  }, [following, userId]);
 
   useEffect(() => {
     list && list.length > 0
@@ -56,7 +56,7 @@ export default function Timeline() {
           const querySnapshot = await getDocs(q);
           return querySnapshot;
         };
-        return getUserbyUserId(db)
+        getUserbyUserId(db)
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               data = [
