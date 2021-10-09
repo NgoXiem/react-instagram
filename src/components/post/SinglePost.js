@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Buttons from "./Buttons";
 import Comments from "./Comments";
 import Skeleton from "react-loading-skeleton";
-import PostHeader from "./Header";
+import PostHeader from "./PostHeader";
 
 export default function SinglePost({ post, users, userId, getUsername }) {
   const inputRef = useRef(null);
