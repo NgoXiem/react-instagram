@@ -86,7 +86,7 @@ export default function Timeline() {
           Follow others to see photos!
         </div>
       ) : !postInfo ? (
-        <Skeleton count={3} height={300}></Skeleton>
+        <Skeleton count={3} height={400}></Skeleton>
       ) : postInfo.length > 0 ? (
         <div className="flex flex-col gap-8">
           {postInfo.map((post) => (

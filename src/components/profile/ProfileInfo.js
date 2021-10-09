@@ -26,6 +26,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
   const [error, setError] = useState(null);
   const { userId } = useContext(LoggedInUserContext);
   const [downloadUrl, setDownloadUrl] = useState("");
+  const [clickedAvatarUrl, setClickedAvatarUrl] = useState(null);
   const imageRef = useRef();
 
   useEffect(() => {
@@ -141,7 +142,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
       );
     }
   };
-  ///// get avatar based on avatar Id. If there is not avatars collection yet, create a new one(in order to update later)
+  ///// For personal profile: get avatar based on avatar Id. If there is not avatars collection yet, create a new one(in order to update later)
   useEffect(() => {
     const getAvatarbyId = async () => {
       const docRef = doc(db, "avatars", userId);
@@ -160,6 +161,17 @@ export default function ProfileInfo({ clickedUser, photos }) {
     };
     userId && getAvatarbyId();
   }, [userId, downloadUrl]);
+  // /////// For clicked user profile: find avatar in the collection
+  useEffect(() => {
+    const getAvatarbyId = async () => {
+      const docRef = doc(db, "avatars", clickedUser.id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setClickedAvatarUrl(docSnap.data().imageSrc);
+      }
+    };
+    clickedUser && getAvatarbyId();
+  }, [clickedUser]);
 
   return !photos ? (
     <Skeleton count={1} height={150}></Skeleton>
@@ -178,7 +190,11 @@ export default function ProfileInfo({ clickedUser, photos }) {
         ) : (
           <img
             className="rounded-full w-36 h-36 object-cover"
-            src={`/images/avatars/${clickedUser.data.username}.jpg`}
+            src={
+              clickedAvatarUrl
+                ? clickedAvatarUrl
+                : `/images/avatars/${clickedUser.data.username}.jpg`
+            }
             alt="profile"
             onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
           ></img>

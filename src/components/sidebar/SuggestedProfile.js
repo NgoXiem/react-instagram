@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import db from "../../lib/firebase";
 export default function SuggestedProfile({ userId, profile }) {
   const [followed, setFollowed] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
+  // /////// For clicked user profile: find avatar in the collection
+  useEffect(() => {
+    const getAvatarbyId = async () => {
+      const docRef = doc(db, "avatars", profile.data.userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setImageUrl(docSnap.data().imageSrc);
+      }
+    };
+    profile.data.userId && getAvatarbyId();
+  }, [profile.data.userId]);
   const handleClick = (docId, profileUserId) => {
     setFollowed(true);
     // Atomically add a new following to the "following" array field.
@@ -27,10 +39,12 @@ export default function SuggestedProfile({ userId, profile }) {
     <div className="grid grid-cols-3 gap-6 justify-between items-center">
       <div className="flex gap-2 col-span-1 items-center">
         <img
-          src={`/images/avatars/${profile.data.username}.jpg`}
+          src={
+            imageUrl ? imageUrl : `/images/avatars/${profile.data.username}.jpg`
+          }
           alt="profile"
           className="rounded-full w-8 h-8 object-cover"
-          onError={(e) => e.target.src= "/images/avatars/default.jpg"}
+          onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
         />
         <Link to={`/profile/${profile.data.userId}`}>
           <p className="font-semibold text-sm text-gray-base">

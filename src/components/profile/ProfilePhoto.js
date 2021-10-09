@@ -4,7 +4,7 @@ export default function ProfilePhoto({ photos }) {
   return (
     <div className="my-10">
       {!photos ? (
-        <Skeleton count={1} height={100}></Skeleton>
+        <Skeleton count={1} height={500}></Skeleton>
       ) : photos.length > 0 ? (
         <div className="grid grid-cols-3 gap-5">
           {photos.map((photo) => (
