@@ -6,7 +6,7 @@ export default function ProfilePhoto({ photos }) {
       {!photos ? (
         <Skeleton count={1} height={500}></Skeleton>
       ) : photos.length > 0 ? (
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-3 gap-5 mobiles:gap-2">
           {photos.map((photo) => (
             <div className="relative" key={photo.id}>
               <img

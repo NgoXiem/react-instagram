@@ -33,7 +33,7 @@ export default function Form({
     <div className="border-t py-4 px-4">
       <form className="flex justify-between" onSubmit={(e) => handleSubmit(e)}>
         <input
-          className="w-full h-full outline-none opacity-40 focus:opacity-100"
+          className="w-full h-full outline-none opacity-40 focus:opacity-100 mobiles:text-xs"
           type="text"
           placeholder="Add a comment..."
           ref={inputRef}
@@ -43,7 +43,7 @@ export default function Form({
         <button
           type="submit"
           disabled={comment.length < 1}
-          className={`font-semibold text-blue-500 ${
+          className={`font-semibold mobiles:text-xs text-blue-500 ${
             comment.length > 0 ? "opacity-100" : "opacity-40"
           }`}
         >

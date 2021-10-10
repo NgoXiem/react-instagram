@@ -16,7 +16,7 @@ export default function PostHeader({ user, imageUrl }) {
             onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
           />
           <Link to={`/profile/${user.userId}`}>
-            <span className="font-bold">{user.username}</span>
+            <span className="font-bold mobiles:text-xs">{user.username}</span>
           </Link>
         </div>
       )}

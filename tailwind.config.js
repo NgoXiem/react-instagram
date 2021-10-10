@@ -9,6 +9,13 @@ module.exports = {
           base: "#616161",
         },
       },
+      screens: {
+        mobiles: { max: "700px" },
+        tablets: "701px",
+      },
+      fontSize: {
+        small: ["0.5rem", "0.875rem"],
+      },
     },
   },
   variants: {

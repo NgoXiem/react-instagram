@@ -18,18 +18,18 @@ export default function Comments({
       ) : (
         <>
           <div>
-            <div className="flex gap-3 pl-5">
+            <div className="flex gap-3 pl-5 mobiles:text-xs">
               <p className="font-bold">{user.username}</p>
               <p>{caption}</p>
             </div>
             {allComments.map((item, index) => (
-              <div key={index} className="flex gap-3 pl-5">
+              <div key={index} className="flex gap-3 pl-5 mobiles:text-xs">
                 <p className="font-bold">{item.displayName}</p>
                 <p>{item.comment}</p>
               </div>
             ))}
           </div>
-          <div className="uppercase pl-5 text-xs text-gray-base">
+          <div className="uppercase pl-5 text-xs text-gray-base mobiles:text-small">
             {formatDistance(new Date(dateCreated), new Date(), {
               addSuffix: true,
             })}

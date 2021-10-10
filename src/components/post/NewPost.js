@@ -80,12 +80,12 @@ export default function NewPost() {
           placeholder="Enter your caption..."
           onChange={(e) => setCaption(e.target.value)}
           value={caption}
-          className="focus: outline-none px-2 py-3 bg-gray-background"
+          className="focus: outline-none px-2 py-3 bg-gray-background mobiles:text-xs"
         />
         <input
           type="file"
           onChange={(e) => handleChange(e)}
-          className="text-sm"
+          className="text-sm mobiles:text-xs"
         />
         {error && <p>{error}</p>}
         <button

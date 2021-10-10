@@ -83,7 +83,7 @@ export default function Buttons({ photoId, likes, handleClickMesssge }) {
           </svg>
         </button>
       </div>
-      <div className="font-bold pl-5">{countLike} likes</div>
+      <div className="font-bold pl-5 mobiles:text-xs">{countLike} likes</div>
     </>
   );
 }

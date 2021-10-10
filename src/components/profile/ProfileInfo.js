@@ -142,7 +142,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
       );
     }
   };
-  ///// For personal profile: get avatar based on avatar Id. If there is not avatars collection yet, create a new one(in order to update later)
+  ///// Get avatar based on avatar Id
   useEffect(() => {
     const getAvatarbyId = async () => {
       const docRef = doc(db, "avatars", userId);
@@ -161,17 +161,6 @@ export default function ProfileInfo({ clickedUser, photos }) {
     };
     userId && getAvatarbyId();
   }, [userId, downloadUrl]);
-  // /////// For clicked user profile: find avatar in the collection
-  useEffect(() => {
-    const getAvatarbyId = async () => {
-      const docRef = doc(db, "avatars", clickedUser.id);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setClickedAvatarUrl(docSnap.data().imageSrc);
-      }
-    };
-    clickedUser && getAvatarbyId();
-  }, [clickedUser]);
 
   return !photos ? (
     <Skeleton count={1} height={150}></Skeleton>
@@ -189,7 +178,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
           ></img>
         ) : (
           <img
-            className="rounded-full w-36 h-36 object-cover"
+            className="rounded-full w-36 h-36 object-cover mobiles:w-20 mobiles:h-20"
             src={
               clickedAvatarUrl
                 ? clickedAvatarUrl
@@ -201,8 +190,8 @@ export default function ProfileInfo({ clickedUser, photos }) {
         )}
       </div>
       <div className="col-span-2 grid grid-rows-3 gap-3">
-        <div className="flex gap-10 items-center">
-          <h1 className="text-3xl font-light pb-1">
+        <div className="flex gap-10 items-center mobiles:gap-5">
+          <h1 className="text-3xl font-light pb-1 mobiles:text-xl">
             {clickedUser.data.username}
           </h1>
           <button
@@ -214,7 +203,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
             {follow ? "Unfollow" : "Follow"}
           </button>
         </div>
-        <div className="flex gap-10 pt-1">
+        <div className="flex gap-10 pt-1 mobiles:gap-2 mobiles:text-sm">
           <p>
             <span className="font-semibold">{photos.length}</span> posts
           </p>
@@ -228,7 +217,9 @@ export default function ProfileInfo({ clickedUser, photos }) {
             following
           </p>
         </div>
-        <p className="font-semibold ">{clickedUser.data.fullName}</p>
+        <p className="font-semibold mobiles:text-md">
+          {clickedUser.data.fullName}
+        </p>
       </div>
       {userId === clickedUser.id && (
         <>
