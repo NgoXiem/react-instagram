@@ -165,11 +165,11 @@ export default function ProfileInfo({ clickedUser, photos }) {
   return !photos ? (
     <Skeleton count={1} height={150}></Skeleton>
   ) : photos ? (
-    <div className="grid grid-cols-3 justify-center items-center py-10 border-b w-full">
+    <div className="grid grid-cols-3 justify-center items-center py-10 border-b w-full mobiles:grid-cols-2 mobiles:py-8">
       <div className="col-span-1 flex justify-center items-center">
         {userId === clickedUser.id ? (
           <img
-            className="rounded-full w-36 h-36 object-cover"
+            className="rounded-full w-36 h-36 object-cover mobiles:w-24 mobiles:h-24"
             src={
               avatar.imageSrc ? avatar.imageSrc : "/images/avatars/default.jpg"
             }
@@ -178,7 +178,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
           ></img>
         ) : (
           <img
-            className="rounded-full w-36 h-36 object-cover mobiles:w-20 mobiles:h-20"
+            className="rounded-full w-36 h-36 object-cover mobiles:w-24 mobiles:h-24"
             src={
               clickedAvatarUrl
                 ? clickedAvatarUrl
@@ -189,13 +189,13 @@ export default function ProfileInfo({ clickedUser, photos }) {
           ></img>
         )}
       </div>
-      <div className="col-span-2 grid grid-rows-3 gap-3">
-        <div className="flex gap-10 items-center mobiles:gap-5">
+      <div className="col-span-2 grid grid-rows-3 gap-3 mobiles:col-span-1">
+        <div className="flex gap-10 items-center mobiles:gap-3">
           <h1 className="text-3xl font-light pb-1 mobiles:text-xl">
             {clickedUser.data.username}
           </h1>
           <button
-            className={`bg-blue-500 text-white font-semibold px-6 py-1 rounded text-sm ${
+            className={`bg-blue-500 text-white font-semibold px-6 py-1 mobiles:px-3 rounded text-sm ${
               userId === clickedUser.id ? "hidden" : ""
             }`}
             onClick={() => handleClick()}
@@ -203,7 +203,7 @@ export default function ProfileInfo({ clickedUser, photos }) {
             {follow ? "Unfollow" : "Follow"}
           </button>
         </div>
-        <div className="flex gap-10 pt-1 mobiles:gap-2 mobiles:text-sm">
+        <div className="flex gap-10 pt-1 mobiles:gap-2 mobiles:text-sm mobiles:pt-0 mobiles:flex-wrap">
           <p>
             <span className="font-semibold">{photos.length}</span> posts
           </p>
@@ -225,9 +225,13 @@ export default function ProfileInfo({ clickedUser, photos }) {
         <>
           <form
             onSubmit={(e) => handleUpload(e)}
-            className="flex flex-col gap-2 text-sm justify-center items-center mt-2"
+            className="flex flex-col gap-2 text-sm justify-center items-center mt-2 mobiles:col-span-2"
           >
-            <input type="file" onChange={(e) => handleChange(e)}></input>
+            <input
+              type="file"
+              onChange={(e) => handleChange(e)}
+              className=""
+            ></input>
             <button
               type="submit"
               className="bg-blue-500 rounded w-max px-3 py-1 mt-2 text-white font-semibold"
