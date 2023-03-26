@@ -44,7 +44,7 @@ export default function Signup() {
       });
   };
   return (
-    <div className="bg-gray-background">
+    <div className="bg-gray-background min-h-screen">
       <div className=" pt-10 container mx-auto">
         <div className="flex flex-row justify-center items-center ">
           <div className="text-sm bg-white">

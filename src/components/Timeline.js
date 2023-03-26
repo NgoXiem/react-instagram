@@ -79,7 +79,7 @@ export default function Timeline() {
     return filteredArr;
   };
   return (
-    <div className="h-full flex flex-col gap-8">
+    <div className="h-full flex flex-col gap-8 mb-10">
       <NewPost></NewPost>
       {following && following.length === 0 ? (
         <div className=" text-center font-semibold h-screen">

@@ -21,14 +21,14 @@ export default function User() {
   }, [loggedinUser]);
 
   return loggedinUser.userId ? (
-    <div className="grid grid-cols-3 items-center gap-5">
+    <div className="flex gap-5 items-center max-w-sm">
       <img
         className="rounded-full w-16 h-16 object-cover col-span-1"
         src={imageUrl ? imageUrl : `/images/avatars/default.jpg`}
         alt="profile"
         onError={(e) => (e.target.src = "/images/avatars/default.jpg")}
       />
-      <div className="col-span-2">
+      <div className="col-span-1">
         <Link to={`/profile/${loggedinUser.userId}`}>
           <p className="font-semibold">{loggedinUser.username}</p>
         </Link>

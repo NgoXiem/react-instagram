@@ -26,8 +26,8 @@ export default function Login() {
       });
   };
   return (
-    <div className="bg-gray-background">
-      <div className=" pt-10 container mx-auto">
+    <div className="bg-gray-background min-h-screen">
+      <div className="pt-10 container mx-auto grid items-center">
         <div className="flex flex-row justify-center items-center ">
           <div className="container w-1/3 hidden md:flex ">
             <img
