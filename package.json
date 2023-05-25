@@ -21,7 +21,7 @@
     "build-css": "tailwindcss build ./src/styles/tailwind.css -o ./src/styles/app.css",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "mocha",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.3.6",
+    "mocha": "^10.2.0",
     "postcss": "^8.3.8",
     "tailwindcss": "^2.2.16"
   }
