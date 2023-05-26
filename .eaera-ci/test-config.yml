@@ -1,0 +1,36 @@
+event:
+  push:
+    branches:
+		  - master
+
+  pull_request:
+	  branches:
+		  - master:
+				runner: DockerRunner
+
+        # artifacts: &artifacts
+        #   template: ${{template_url}}
+        #   result_attachments:
+        #     - name: report
+        #       type: zip
+        #       files: 
+        #         - ./output/*.html
+        #         - ./output/*.xml
+        #     - name: logs
+        #       type: zip
+        #       files:
+        #         - ./output/logs/*
+        #     - name: screenshots
+        #       type: pictures
+        #       files:
+        #         - ./output/screenshots/*.png
+        #     - name: screenrecord
+        #       type: videos 
+        #       files: ./output/videos/*
+
+				tests:
+				  - name: unittest
+				    template: ${{template_url}}
+
+				  # - name: integration
+				  #   template: ${{template_url}}
