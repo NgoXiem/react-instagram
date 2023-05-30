@@ -1,0 +1,7 @@
+services:
+  app:
+    build: . 
+    command: npm run test
+    environment:
+      - RAILS_ENV=development
+      - WEBHOOK_SECRET=xiemngo
