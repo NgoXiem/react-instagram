@@ -29,13 +29,12 @@ default:
     # - name: integration
     #   template: ${{template_url}}
 
-event:
-  push:
-    branches:
-      master:
-        <<: *default
+push:
+  branches:
+    master:
+      <<: *default
 
-  pull_request:
-    branches:
-      master:
-        <<: *default
+pull_request:
+  branches:
+    master:
+      <<: *default
