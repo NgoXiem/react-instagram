@@ -7,7 +7,7 @@ describe('Array', function () {
 
     it('should be able to get environment variables', function () {
         assert.equal(process.env.RAILS_ENV, 'development');
-        assert.equal(process.env.WEBHOOK_SECRET, 'xiemngo');
+        assert.equal(process.env.WEBHOOK_SECRET, 'xiemngo111');
       });
   });
 });
