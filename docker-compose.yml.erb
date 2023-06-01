@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: <%= @repo_dir %>
+      dockerfile: <%= "#{@repo_dir}/Dockerfile" %>
     command: npm run test
     environment:
       - RAILS_ENV=<%= ENV['RAILS_ENV'] %>
