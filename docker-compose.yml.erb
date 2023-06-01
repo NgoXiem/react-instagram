@@ -1,6 +1,8 @@
 services:
   app:
-    build: . 
+    build:
+      context: .
+      dockerfile: <%= @repo_dir %>
     command: npm run test
     environment:
       - RAILS_ENV=<%= ENV['RAILS_ENV'] %>
