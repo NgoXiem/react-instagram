@@ -1,0 +1,18 @@
+services:
+  cbs-stories:
+    image: eaera.azurecr.io/eaera-com/cbs-stories:latest
+    restart: "no"
+    command: python3.10 -m behavex -i <%= test_name %>  
+    environment:
+      - TEST_ENV=<%= ENV['TEST_ENV'] %>
+      - TEST_IMAP_HOST=<%= ENV['TEST_IMAP_HOST'] %>
+      - TEST_IMAP_PORT=<%= ENV['TEST_IMAP_PORT']%>
+      - TEST_IMAP_EMAIL= <%=ENV['TEST_IMAP_EMAIL']%>
+      - TEST_IMAP_PASSWORD= <%=ENV['TEST_IMAP_PASSWORD']%>
+      - TEST_SUPPORT_EMAIL= <%=ENV['TEST_SUPPORT_EMAIL']%>
+      - TEST_EMPLOYEE_EMAIL= <%=ENV['TEST_EMPLOYEE_EMAIL']%>
+      - TEST_EMPLOYEE_PASSWORD= <%=ENV['TEST_EMPLOYEE_PASSWORD']%>
+      - TEST_EAERA_API_URL= <%=ENV['TEST_EAERA_API_URL']%>
+      - CLIENT_PORTAL_URL= <%=ENV['CLIENT_PORTAL_URL']%>
+      - BACK_OFFICE_URL= <%=ENV['BACK_OFFICE_URL']%>
+      - TEST_BROWSER= <%=ENV['TEST_BROWSER']%>
