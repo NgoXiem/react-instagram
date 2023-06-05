@@ -1,0 +1,45 @@
+default:
+  &default
+  runner: DockerRunner
+
+  artifacts: &artifacts
+    template: e2e-docker-compose.yml.erb
+    result_attachments:
+      - name: report
+        type: zip
+        files: 
+          - ./output/*.html
+          - ./output/*.xml
+      - name: logs
+        type: zip
+        files:
+          - ./output/logs/*
+      - name: screenshots
+        type: pictures
+        files:
+          - ./output/screenshots/*.png
+      - name: screenrecord
+        type: videos 
+        files: ./output/videos/*
+
+  tests:
+    - name: unittest
+      template: docker-compose.yml.erb
+
+    - name: login.feature
+      <<: *artifacts
+
+
+push:
+  branches:
+    master:
+      <<: *default
+    main:
+      <<: *default
+
+pull_request:
+  branches:
+    master:
+      <<: *default
+    main:
+      <<: *default
