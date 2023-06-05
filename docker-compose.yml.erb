@@ -1,7 +1,9 @@
 services:
   app:
-    build: . 
+    build:
+      context: <%= "#{@repo_dir}" %>
+      dockerfile: <%= "#{@repo_dir}/Dockerfile" %>
     command: npm run test
     environment:
-      - RAILS_ENV: <%= ENV.fetch(RAILS_ENV) %>
-      - WEBHOOK_SECRET: <%= ENV.fetch(GITHUB_WEBHOOK_SECRET) %>
+      - RAILS_ENV=<%= ENV['RAILS_ENV'] %>
+      - WEBHOOK_SECRET=<%= ENV['GITHUB_WEBHOOK_SECRET']%>

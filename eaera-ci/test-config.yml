@@ -29,7 +29,6 @@ default:
     - name: login.feature
       <<: *artifacts
 
-
 push:
   branches:
     master:
